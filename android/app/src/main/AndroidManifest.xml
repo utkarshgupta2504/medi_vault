@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.medi_vault">
    <application
-        android:label="medi_vault"
+        android:label="Medi Vault"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
