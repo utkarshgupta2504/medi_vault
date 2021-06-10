@@ -38,7 +38,7 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       name: map['name'],
-      dob: map['dob'],
+      dob: DateTime.parse(map['dob']),
       gender: map['gender'],
       weight: map['weight'],
       height: map['height'],
@@ -47,8 +47,8 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String? source) =>
+      UserModel.fromMap(json.decode(source!));
 
   @override
   String toString() {

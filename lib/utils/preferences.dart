@@ -11,6 +11,14 @@ class Preference {
     return _prefs;
   }
 
+  static bool hasKey(String key) {
+    if (_memoryPrefs.containsKey(key)) {
+      return true;
+    }
+
+    return _prefs!.containsKey(key);
+  }
+
   static void setString(String key, String value) {
     _prefs!.setString(key, value);
     _memoryPrefs[key] = value;
@@ -31,7 +39,7 @@ class Preference {
     _memoryPrefs[key] = value;
   }
 
-  static String getString(String key, {String? def}) {
+  static String? getString(String key, {String? def}) {
     String? val;
     if (_memoryPrefs.containsKey(key)) {
       val = _memoryPrefs[key];
@@ -43,7 +51,7 @@ class Preference {
       val = def;
     }
     _memoryPrefs[key] = val;
-    return val!;
+    return val;
   }
 
   static int getInt(String key, {int? def}) {
