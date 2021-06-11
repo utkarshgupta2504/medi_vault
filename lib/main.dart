@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medi_vault/providers/graph_data_provider.dart';
 import 'package:medi_vault/providers/user_provider.dart';
 import 'package:medi_vault/routes/app_router.gr.dart';
 import 'package:medi_vault/utils/global.dart';
@@ -6,8 +7,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => UserProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => GraphDataProvider()),
+      ],
       child: MyApp(),
     ),
   );

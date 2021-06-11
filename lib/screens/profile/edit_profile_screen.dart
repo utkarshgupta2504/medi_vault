@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,19 +12,20 @@ import 'package:medi_vault/utils/image_utils.dart';
 import 'package:medi_vault/utils/preferences.dart';
 import 'package:medi_vault/widgets/circle_image.dart';
 import 'package:intl/intl.dart';
+import 'package:medi_vault/widgets/user_header.dart';
 
 const List<String> genderList = ['--Select--', 'Male', 'Female'];
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  EditProfileScreen({Key? key, this.isStarting = false}) : super(key: key);
+
+  final bool isStarting;
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final DateFormat formatter = DateFormat("MMMM dd, yyyy\nEEEE");
-
   late TextEditingController nameController;
   late TextEditingController heightController;
   late TextEditingController weightController;
@@ -117,7 +119,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // AppLogger.print("Edit screen, isStarting: ${widget.isStarting}");
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.isStarting ? "Set Profile" : "Edit Profile"),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -126,56 +132,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      formatter.format(DateTime.now()),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Stack(
-                    children: [
-                      CircleImage(
-                        size: 50,
-                        imageString: Preference.getString(Global.profilePhoto,
-                            def: null),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.blueGrey,
-                          ),
-                          child: SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: IconButton(
-                              iconSize: 15,
-                              // padding: EdgeInsets.all(10),
-                              color: Colors.white,
-                              icon: Icon(
-                                Icons.camera_alt,
-                              ),
-                              onPressed: () {
-                                _showPicker(context);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Text(
-                      user.name ?? "--",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
+              UserHeader(
+                  user: user, isEditScreen: true, showPicker: _showPicker),
               Container(
                 color: Colors.grey[100],
                 child: SizedBox(
@@ -279,6 +237,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                                 setState(() {});
 
+                                if (!widget.isStarting) {
+                                  AutoRouter.of(context).pop();
+                                }
+
                                 Preference.setBool(Global.profileSet, true);
                               } else {
                                 AppLogger.print(
@@ -334,7 +296,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: ListTile(
                   title: Text(value == null && user.dob == null
                       ? "Select Date"
-                      : formatter.format(DateTime.parse(value!))),
+                      : DateFormat("MMMM dd, yyyy")
+                          .format(DateTime.parse(value!))),
                   trailing: Icon(Icons.calendar_today),
                   onTap: () async {
                     DateTime? date = await showDatePicker(
