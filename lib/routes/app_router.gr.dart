@@ -8,6 +8,7 @@ import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:flutter/material.dart' as _i2;
 
 import '../screens/dashboard/dashboard_screen.dart' as _i5;
+import '../screens/dashboard/information/images_display_screen.dart' as _i6;
 import '../screens/profile/edit_profile_screen.dart' as _i4;
 import '../screens/splash_screen.dart' as _i3;
 
@@ -34,6 +35,13 @@ class AppRouter extends _i1.RootStackRouter {
         routeData: routeData,
         builder: (_) {
           return const _i5.DashboardScreen();
+        }),
+    ImagesDisplayScreenRoute.name: (routeData) => _i1.MaterialPageX<dynamic>(
+        routeData: routeData,
+        builder: (data) {
+          final args = data.argsAs<ImagesDisplayScreenRouteArgs>();
+          return _i6.ImagesDisplayScreen(
+              key: args.key, title: args.title, imagesList: args.imagesList);
         })
   };
 
@@ -42,7 +50,9 @@ class AppRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(SplashScreenRoute.name, path: '/'),
         _i1.RouteConfig(EditProfileScreenRoute.name,
             path: '/edit-profile-screen'),
-        _i1.RouteConfig(DashboardScreenRoute.name, path: '/dashboard-screen')
+        _i1.RouteConfig(DashboardScreenRoute.name, path: '/dashboard-screen'),
+        _i1.RouteConfig(ImagesDisplayScreenRoute.name,
+            path: '/images-display-screen')
       ];
 }
 
@@ -74,4 +84,27 @@ class DashboardScreenRoute extends _i1.PageRouteInfo {
   const DashboardScreenRoute() : super(name, path: '/dashboard-screen');
 
   static const String name = 'DashboardScreenRoute';
+}
+
+class ImagesDisplayScreenRoute
+    extends _i1.PageRouteInfo<ImagesDisplayScreenRouteArgs> {
+  ImagesDisplayScreenRoute(
+      {_i2.Key? key, required String title, required List<dynamic>? imagesList})
+      : super(name,
+            path: '/images-display-screen',
+            args: ImagesDisplayScreenRouteArgs(
+                key: key, title: title, imagesList: imagesList));
+
+  static const String name = 'ImagesDisplayScreenRoute';
+}
+
+class ImagesDisplayScreenRouteArgs {
+  const ImagesDisplayScreenRouteArgs(
+      {this.key, required this.title, required this.imagesList});
+
+  final _i2.Key? key;
+
+  final String title;
+
+  final List<dynamic>? imagesList;
 }

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:medi_vault/models/graph_data_model.dart';
 import 'package:medi_vault/utils/app_logger.dart';
 
-import 'add_entry_widget.dart';
+import 'add_graph_entry_widget.dart';
 
 List<String> labels = [];
 List<double> values = [];
@@ -70,75 +70,79 @@ class LineChartWidget extends StatelessWidget {
       color: Colors.grey[100],
       child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => AddEntryWidget(
-                  units: units,
-                  onSave: onSave,
-                  chartData: chartData,
-                ),
-              );
-            },
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(8, 24, 24, 16),
-                child: SizedBox(
-                  height: 250,
-                  child: LineChart(
-                    LineChartData(
-                      axisTitleData: FlAxisTitleData(
-                        topTitle: AxisTitle(
-                          titleText: title,
-                          showTitle: true,
-                          margin: 10,
-                          textStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AddGraphEntryWidget(
+                    units: units,
+                    onSave: onSave,
+                    chartData: chartData,
+                  ),
+                );
+              },
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(8, 24, 24, 16),
+                  child: SizedBox(
+                    height: 250,
+                    child: LineChart(
+                      LineChartData(
+                        axisTitleData: FlAxisTitleData(
+                          topTitle: AxisTitle(
+                            titleText: title,
+                            showTitle: true,
+                            margin: 10,
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
+                          leftTitle:
+                              AxisTitle(titleText: units, showTitle: true),
+                          bottomTitle:
+                              AxisTitle(titleText: "Date", showTitle: true),
                         ),
-                        leftTitle: AxisTitle(titleText: units, showTitle: true),
-                        bottomTitle:
-                            AxisTitle(titleText: "Date", showTitle: true),
-                      ),
-                      titlesData: FlTitlesData(
-                          show: true,
-                          bottomTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (value) => labels[value.toInt()],
-                          )),
-                      lineBarsData: [
-                        LineChartBarData(
-                          colors: [
-                            Colors.red,
-                          ],
-                          spots: values
-                              .asMap()
-                              .entries
-                              .map((e) => FlSpot(e.key.toDouble(), e.value))
-                              .toList(),
-                          isCurved: true,
-                          dotData: FlDotData(show: false),
-                          belowBarData: BarAreaData(
+                        titlesData: FlTitlesData(
                             show: true,
-                            gradientColorStops: [0, 1],
-                            gradientFrom: Offset(0, 0),
-                            gradientTo: Offset(0, 1),
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) => labels[value.toInt()],
+                            )),
+                        lineBarsData: [
+                          LineChartBarData(
                             colors: [
-                              Colors.redAccent[100]!,
-                              Colors.white,
+                              Colors.red,
                             ],
-                          ),
-                        )
-                      ],
-                      clipData: FlClipData.all(),
-                      gridData: FlGridData(
-                        show: false,
+                            spots: values
+                                .asMap()
+                                .entries
+                                .map((e) => FlSpot(e.key.toDouble(), e.value))
+                                .toList(),
+                            isCurved: true,
+                            dotData: FlDotData(show: false),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              gradientColorStops: [0, 1],
+                              gradientFrom: Offset(0, 0),
+                              gradientTo: Offset(0, 1),
+                              colors: [
+                                Colors.redAccent[100]!,
+                                Colors.white,
+                              ],
+                            ),
+                          )
+                        ],
+                        clipData: FlClipData.all(),
+                        gridData: FlGridData(
+                          show: false,
+                        ),
+                        minY: totalMin - 10,
+                        maxY: totalMax + 10,
                       ),
-                      minY: totalMin - 10,
-                      maxY: totalMax + 10,
                     ),
                   ),
                 ),

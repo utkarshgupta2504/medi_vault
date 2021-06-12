@@ -2,9 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:medi_vault/models/user_model.dart';
 import 'package:medi_vault/screens/dashboard/analytics/analytics_screen.dart';
-import 'package:medi_vault/screens/profile/edit_profile_screen.dart';
-import 'package:medi_vault/utils/global.dart';
-import 'package:medi_vault/utils/preferences.dart';
+import 'package:medi_vault/screens/dashboard/information/information_screen.dart';
 import 'package:medi_vault/widgets/my_drawer.dart';
 import 'package:medi_vault/widgets/user_header.dart';
 
@@ -35,8 +33,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.initState();
 
     _tabController = TabController(length: _tabs.length, vsync: this);
-
-    user = UserModel.fromJson(Preference.getString(Global.userProfileDetails));
   }
 
   @override
@@ -47,29 +43,38 @@ class _DashboardScreenState extends State<DashboardScreen>
       ),
       drawer: MyDrawer(),
       body: SafeArea(
-        child: Column(
-          children: [
-            UserHeader(user: user, isEditScreen: false),
-            TabBar(
-              tabs: _tabs,
-              controller: _tabController,
-              indicatorSize: TabBarIndicatorSize.label,
-              labelColor: Colors.blue,
-              unselectedLabelColor: Colors.black,
-              labelPadding: EdgeInsets.symmetric(horizontal: 8),
-              dragStartBehavior: DragStartBehavior.down,
-            ),
-            Expanded(
-              child: TabBarView(
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  AnalyticsScreen(),
-                  EditProfileScreen(),
-                ],
-                controller: _tabController,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 24,
+          ),
+          child: Column(
+            children: [
+              UserHeader(isEditScreen: false),
+              SizedBox(
+                height: 10,
               ),
-            )
-          ],
+              TabBar(
+                tabs: _tabs,
+                controller: _tabController,
+                indicatorSize: TabBarIndicatorSize.label,
+                labelColor: Colors.blue,
+                unselectedLabelColor: Colors.black,
+                labelPadding: EdgeInsets.symmetric(horizontal: 8),
+                dragStartBehavior: DragStartBehavior.down,
+              ),
+              Expanded(
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    AnalyticsScreen(),
+                    InformationScreen(),
+                  ],
+                  controller: _tabController,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

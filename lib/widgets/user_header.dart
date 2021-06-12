@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medi_vault/models/user_model.dart';
+import 'package:medi_vault/providers/user_provider.dart';
 import 'package:medi_vault/utils/global.dart';
 import 'package:medi_vault/utils/preferences.dart';
+import 'package:provider/provider.dart';
 
 import 'circle_image.dart';
 
 class UserHeader extends StatelessWidget {
   const UserHeader({
     Key? key,
-    required this.user,
     required this.isEditScreen,
     this.showPicker,
   }) : super(key: key);
 
-  final UserModel user;
   final bool isEditScreen;
   final Function? showPicker;
 
@@ -64,8 +64,12 @@ class UserHeader extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            user.name ?? "--",
+            Provider.of<UserProvider>(context).user!.name ?? "--",
             textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],

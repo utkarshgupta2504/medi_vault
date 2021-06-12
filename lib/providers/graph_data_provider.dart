@@ -33,11 +33,10 @@ class GraphDataProvider extends ChangeNotifier {
             Preference.getString(Global.bloodPressureData)!)
         : GraphDataModel();
 
-    AppLogger.print(_bloodPressureData.toString());
+    // AppLogger.print(_bloodPressureData.toString());
 
     if (notify) {
       notifyListeners();
-      AppLogger.print("Blood Pressure Notified!");
     }
   }
 

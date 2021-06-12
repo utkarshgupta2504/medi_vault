@@ -132,8 +132,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           child: Column(
             children: [
-              UserHeader(
-                  user: user, isEditScreen: true, showPicker: _showPicker),
+              UserHeader(isEditScreen: true, showPicker: _showPicker),
               Container(
                 color: Colors.grey[100],
                 child: SizedBox(

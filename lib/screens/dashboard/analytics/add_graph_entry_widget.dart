@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medi_vault/models/graph_data_model.dart';
-import 'package:medi_vault/providers/graph_data_provider.dart';
 import 'package:medi_vault/utils/app_logger.dart';
-import 'package:provider/provider.dart';
 
-class AddEntryWidget extends StatefulWidget {
-  const AddEntryWidget({
+class AddGraphEntryWidget extends StatefulWidget {
+  const AddGraphEntryWidget({
     Key? key,
     required this.units,
     required this.onSave,
@@ -21,7 +19,7 @@ class AddEntryWidget extends StatefulWidget {
   _AddEntryWidgetState createState() => _AddEntryWidgetState();
 }
 
-class _AddEntryWidgetState extends State<AddEntryWidget> {
+class _AddEntryWidgetState extends State<AddGraphEntryWidget> {
   DateTime? date;
   late TextEditingController _textEditingController;
 
