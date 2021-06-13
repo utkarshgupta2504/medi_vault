@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:medi_vault/models/user_model.dart';
-
 class GraphDataModel {
   Map<DateTime, double>? data;
 

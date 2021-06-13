@@ -5,10 +5,20 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:medi_vault/models/allergy_model.dart';
+import 'package:medi_vault/models/disease_model.dart';
+import 'package:medi_vault/models/medication_model.dart';
+import 'package:medi_vault/models/vaccination_model.dart';
 import 'package:medi_vault/routes/app_router.gr.dart';
+import 'package:medi_vault/screens/dashboard/information/add_information_widgets.dart';
+import 'package:medi_vault/screens/dashboard/information/data_card_widget.dart';
+import 'package:medi_vault/utils/common_functions.dart';
 import 'package:medi_vault/utils/global.dart';
 import 'package:medi_vault/utils/image_utils.dart';
 import 'package:medi_vault/utils/preferences.dart';
+
+DateFormat formatter = DateFormat("MMMM dd, yyyy");
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({Key? key}) : super(key: key);
@@ -70,8 +80,36 @@ class _InformationScreenState extends State<InformationScreen> {
             subtitle: Text("Currently used medicines"),
             trailing: ElevatedButton(
               child: Text("Add"),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => AddMedication(),
+                );
+              },
             ),
+            onTap: () {
+              AutoRouter.of(context).root.push(InformationDetailScreenRoute(
+                    createCard: (data) {
+                      MedicationModel medicationModel =
+                          MedicationModel.fromJson(data);
+                      return DataCard(
+                        fields: [
+                          DataField(
+                            name: "Name:",
+                            value: medicationModel.medicineName!,
+                          ),
+                          DataField(
+                            name: "Reason:",
+                            value: medicationModel.reason!,
+                          ),
+                        ],
+                      );
+                    },
+                    informationList:
+                        getInformationList(Global.medicationInformation),
+                    title: "Medications",
+                  ));
+            },
           ),
           ListTile(
             title: Text("Known Diseases"),
@@ -80,6 +118,32 @@ class _InformationScreenState extends State<InformationScreen> {
               child: Text("Add"),
               onPressed: () {},
             ),
+            onTap: () {
+              AutoRouter.of(context).root.push(InformationDetailScreenRoute(
+                    createCard: (data) {
+                      DiseaseModel diseaseModel = DiseaseModel.fromJson(data);
+                      return DataCard(
+                        fields: [
+                          DataField(
+                            name: "Name:",
+                            value: diseaseModel.disease!,
+                          ),
+                          DataField(
+                            name: "From:",
+                            value: formatter.format(diseaseModel.fromDate!),
+                          ),
+                          DataField(
+                            name: "To:",
+                            value: formatter.format(diseaseModel.toDate!),
+                          ),
+                        ],
+                      );
+                    },
+                    informationList:
+                        getInformationList(Global.diseaseInformation),
+                    title: "Known Diseases",
+                  ));
+            },
           ),
           ListTile(
             title: Text("Allergies"),
@@ -88,6 +152,28 @@ class _InformationScreenState extends State<InformationScreen> {
               child: Text("Add"),
               onPressed: () {},
             ),
+            onTap: () {
+              AutoRouter.of(context).root.push(InformationDetailScreenRoute(
+                    createCard: (data) {
+                      AllergyModel allergyModel = AllergyModel.fromJson(data);
+                      return DataCard(
+                        fields: [
+                          DataField(
+                            name: "Item:",
+                            value: allergyModel.item!,
+                          ),
+                          DataField(
+                            name: "Reaction:",
+                            value: allergyModel.reaction!,
+                          ),
+                        ],
+                      );
+                    },
+                    informationList:
+                        getInformationList(Global.allergyInformation),
+                    title: "Allergies",
+                  ));
+            },
           ),
           ListTile(
             title: Text("Vaccinations"),
@@ -96,6 +182,37 @@ class _InformationScreenState extends State<InformationScreen> {
               child: Text("Add"),
               onPressed: () {},
             ),
+            onTap: () {
+              AutoRouter.of(context).root.push(InformationDetailScreenRoute(
+                    createCard: (data) {
+                      VaccinationModel vaccinationModel =
+                          VaccinationModel.fromJson(data);
+                      return DataCard(
+                        fields: [
+                          DataField(
+                            name: "Name:",
+                            value: vaccinationModel.tradeName!,
+                          ),
+                          DataField(
+                            name: "Date:",
+                            value: formatter.format(vaccinationModel.date!),
+                          ),
+                          DataField(
+                            name: "Against:",
+                            value: vaccinationModel.against!,
+                          ),
+                          DataField(
+                            name: "Immunization:",
+                            value: vaccinationModel.immunizationType!,
+                          ),
+                        ],
+                      );
+                    },
+                    informationList:
+                        getInformationList(Global.vaccinationInformation),
+                    title: "Vaccinations",
+                  ));
+            },
           ),
         ],
       ),
@@ -148,7 +265,8 @@ class _InformationScreenState extends State<InformationScreen> {
       maxWidth: 1800,
       maxHeight: 1800,
     );
-    if (pickedFile != null) await _cropImage(pickedFile.path);
+    if (pickedFile != null)
+      await _cropImage(pickedFile.path, preferenceKey: preferenceKey);
   }
 
   /// Crop Image
@@ -165,6 +283,8 @@ class _InformationScreenState extends State<InformationScreen> {
           : [];
       prevImages.add(ImageUtility.base64String(image.readAsBytesSync()));
       Preference.setString(preferenceKey, jsonEncode(prevImages));
+
+      showSnackbar("Image Added Successfully!");
     }
   }
 }

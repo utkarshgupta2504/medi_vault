@@ -40,7 +40,6 @@ class _AddEntryWidgetState extends State<AddGraphEntryWidget> {
         children: [
           Text("Add Entry"),
           Divider(
-            height: 5,
             thickness: 2,
           ),
           SizedBox(

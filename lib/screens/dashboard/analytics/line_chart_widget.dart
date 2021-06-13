@@ -114,27 +114,27 @@ class LineChartWidget extends StatelessWidget {
                             )),
                         lineBarsData: [
                           LineChartBarData(
-                            colors: [
-                              Colors.red,
-                            ],
-                            spots: values
-                                .asMap()
-                                .entries
-                                .map((e) => FlSpot(e.key.toDouble(), e.value))
-                                .toList(),
-                            isCurved: true,
-                            dotData: FlDotData(show: false),
-                            belowBarData: BarAreaData(
-                              show: true,
-                              gradientColorStops: [0, 1],
-                              gradientFrom: Offset(0, 0),
-                              gradientTo: Offset(0, 1),
                               colors: [
-                                Colors.redAccent[100]!,
-                                Colors.white,
+                                Colors.red,
                               ],
-                            ),
-                          )
+                              spots: values
+                                  .asMap()
+                                  .entries
+                                  .map((e) => FlSpot(e.key.toDouble(), e.value))
+                                  .toList(),
+                              isCurved: true,
+                              dotData: FlDotData(show: false),
+                              belowBarData: BarAreaData(
+                                show: true,
+                                gradientColorStops: [0, 1],
+                                gradientFrom: Offset(0, 0),
+                                gradientTo: Offset(0, 1),
+                                colors: [
+                                  Colors.redAccent[100]!,
+                                  Colors.white,
+                                ],
+                              ),
+                              curveSmoothness: 0.25)
                         ],
                         clipData: FlClipData.all(),
                         gridData: FlGridData(

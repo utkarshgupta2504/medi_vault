@@ -19,9 +19,15 @@ class ImagesDisplayScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          UserHeader(isEditScreen: false),
           SizedBox(
-            height: 10,
+            height: 24,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: UserHeader(isEditScreen: false),
+          ),
+          SizedBox(
+            height: 16,
           ),
           imagesList == null || imagesList!.isEmpty
               ? Expanded(
