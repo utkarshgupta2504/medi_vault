@@ -34,9 +34,13 @@ class InformationDetailScreen extends StatelessWidget {
                   ? NoDataWidget()
                   : Container(
                       color: Colors.grey[200],
-                      child: ListView(
-                        children:
-                            informationList!.map((e) => createCard(e)).toList(),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: ListView(
+                          children: informationList!
+                              .map((e) => createCard(e))
+                              .toList(),
+                        ),
                       ),
                     ),
             )

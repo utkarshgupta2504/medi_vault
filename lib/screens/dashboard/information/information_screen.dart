@@ -116,7 +116,12 @@ class _InformationScreenState extends State<InformationScreen> {
             subtitle: Text("Diseases you have presently, or had in the past"),
             trailing: ElevatedButton(
               child: Text("Add"),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => AddDisesase(),
+                );
+              },
             ),
             onTap: () {
               AutoRouter.of(context).root.push(InformationDetailScreenRoute(
@@ -150,7 +155,12 @@ class _InformationScreenState extends State<InformationScreen> {
             subtitle: Text("Items you are allergic to"),
             trailing: ElevatedButton(
               child: Text("Add"),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => AddAllergy(),
+                );
+              },
             ),
             onTap: () {
               AutoRouter.of(context).root.push(InformationDetailScreenRoute(
@@ -180,7 +190,12 @@ class _InformationScreenState extends State<InformationScreen> {
             subtitle: Text("Vaccinations you have received"),
             trailing: ElevatedButton(
               child: Text("Add"),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => AddVaccination(),
+                );
+              },
             ),
             onTap: () {
               AutoRouter.of(context).root.push(InformationDetailScreenRoute(

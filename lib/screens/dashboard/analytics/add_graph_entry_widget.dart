@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medi_vault/models/graph_data_model.dart';
 import 'package:medi_vault/utils/app_logger.dart';
+import 'package:medi_vault/utils/common_functions.dart';
 
 class AddGraphEntryWidget extends StatefulWidget {
   const AddGraphEntryWidget({
@@ -134,6 +135,8 @@ class _AddEntryWidgetState extends State<AddGraphEntryWidget> {
               AppLogger.print("New Values: ${prevValues.toString()}");
 
               widget.onSave(GraphDataModel(data: prevValues));
+
+              showSnackbar("Value Added");
 
               Navigator.pop(context);
             }

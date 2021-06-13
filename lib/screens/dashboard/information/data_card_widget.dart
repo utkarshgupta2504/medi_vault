@@ -10,9 +10,24 @@ class DataCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: fields,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: Card(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            children: fields
+                .asMap()
+                .entries
+                .map<Column>((entry) => Column(
+                      children: [
+                        entry.value,
+                        if (entry.key != fields.length - 1) Divider(),
+                      ],
+                    ))
+                .toList(),
+          ),
+        ),
       ),
     );
   }
@@ -30,9 +45,19 @@ class DataField extends StatelessWidget {
     return Container(
       child: Row(
         children: [
-          Text(name),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           Expanded(
-            child: Text(value),
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.right,
+            ),
           ),
         ],
       ),

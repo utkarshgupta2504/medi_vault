@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:medi_vault/models/allergy_model.dart';
+import 'package:medi_vault/models/disease_model.dart';
 import 'package:medi_vault/models/medication_model.dart';
-import 'package:medi_vault/routes/app_router.gr.dart';
+import 'package:medi_vault/models/vaccination_model.dart';
 import 'package:medi_vault/utils/common_functions.dart';
 import 'package:medi_vault/utils/global.dart';
 
@@ -79,13 +81,83 @@ class AddDisesase extends StatefulWidget {
 }
 
 class _AddDisesaseState extends State<AddDisesase> {
+  TextEditingController _diseaseController = TextEditingController();
+  DateTime? toDate;
+  DateTime? fromDate;
+
+  bool isNameError = false;
+  bool isFromDateError = false;
+  bool isToDateError = false;
+
   @override
   Widget build(BuildContext context) {
     return _alertOutline(
-      child: Container(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTextField(
+            key: "Disease Name",
+            textEditingController: _diseaseController,
+          ),
+          if (isNameError) _errorMessage("Enter a disease name"),
+          _buildDateSelector(
+            key: "Date From",
+            date: fromDate,
+            context: context,
+            setDate: (DateTime? date) {
+              setState(() {
+                fromDate = date;
+              });
+            },
+          ),
+          if (isFromDateError) _errorMessage("Select a date"),
+          _buildDateSelector(
+            key: "Date To",
+            date: toDate,
+            context: context,
+            setDate: (DateTime? date) {
+              setState(() {
+                toDate = date;
+              });
+            },
+          ),
+          if (isToDateError) _errorMessage("Select a date"),
+        ],
+      ),
       onSubmit: () {
-        AutoRouter.of(context).root.pop();
-        showSnackbar("Added Successfully");
+        bool flag = true;
+
+        if (_diseaseController.text.trim().isEmpty) {
+          setState(() {
+            flag = false;
+            isNameError = true;
+          });
+        }
+
+        if (fromDate == null) {
+          setState(() {
+            flag = false;
+            isFromDateError = true;
+          });
+        }
+
+        if (toDate == null) {
+          setState(() {
+            flag = false;
+            isToDateError = true;
+          });
+        }
+
+        if (flag) {
+          DiseaseModel diseaseModel = DiseaseModel(
+            disease: _diseaseController.text,
+            fromDate: fromDate,
+            toDate: toDate,
+          );
+          updateInformationList(Global.diseaseInformation, diseaseModel);
+          AutoRouter.of(context).root.pop();
+          showSnackbar("Added Successfully");
+        }
       },
     );
   }
@@ -99,13 +171,58 @@ class AddAllergy extends StatefulWidget {
 }
 
 class _AddAllergyState extends State<AddAllergy> {
+  TextEditingController itemNameController = TextEditingController();
+  TextEditingController reactionController = TextEditingController();
+
+  bool isNameError = false;
+  bool isReactionError = false;
+
   @override
   Widget build(BuildContext context) {
     return _alertOutline(
-      child: Container(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTextField(
+            key: "Name",
+            textEditingController: itemNameController,
+          ),
+          if (isNameError) _errorMessage("Enter a Medicine Name"),
+          _buildTextField(
+            key: "Reaction",
+            textEditingController: reactionController,
+          ),
+          if (isReactionError) _errorMessage("Enter a Reaction"),
+        ],
+      ),
       onSubmit: () {
-        AutoRouter.of(context).root.pop();
-        showSnackbar("Added Successfully");
+        bool flag = true;
+
+        if (itemNameController.text.trim().isEmpty) {
+          setState(() {
+            flag = false;
+            isNameError = true;
+          });
+        }
+
+        if (reactionController.text.trim().isEmpty) {
+          setState(() {
+            flag = false;
+            isReactionError = true;
+          });
+        }
+
+        if (flag) {
+          AllergyModel allergyModel = AllergyModel(
+            item: itemNameController.text,
+            reaction: reactionController.text,
+          );
+
+          updateInformationList(Global.medicationInformation, allergyModel);
+
+          AutoRouter.of(context).root.pop();
+          showSnackbar("Added Successfully");
+        }
       },
     );
   }
@@ -119,13 +236,92 @@ class AddVaccination extends StatefulWidget {
 }
 
 class _AddVaccinationState extends State<AddVaccination> {
+  TextEditingController _tradeNameController = TextEditingController();
+  TextEditingController _againstController = TextEditingController();
+  TextEditingController _immunizationController = TextEditingController();
+
+  DateTime? date;
+
+  bool isTradeNameError = false;
+  bool isDateError = false;
+  bool isAgainstError = false;
+  bool isImmunizationError = false;
+
   @override
   Widget build(BuildContext context) {
     return _alertOutline(
-      child: Container(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTextField(
+              key: "Trade Name", textEditingController: _tradeNameController),
+          if (isTradeNameError) _errorMessage("Enter a trade name"),
+          _buildDateSelector(
+            key: "Date",
+            date: date,
+            context: context,
+            setDate: (DateTime? d) {
+              setState(() {
+                date = d;
+              });
+            },
+          ),
+          if (isDateError) _errorMessage("Select a Date"),
+          _buildTextField(
+              key: "Against", textEditingController: _againstController),
+          if (isAgainstError) _errorMessage("Enter a disease name"),
+          _buildTextField(
+            key: "Immunization",
+            textEditingController: _immunizationController,
+          ),
+          if (isImmunizationError) _errorMessage("Enter an Immunizaion Type"),
+        ],
+      ),
       onSubmit: () {
-        AutoRouter.of(context).root.pop();
-        showSnackbar("Added Successfully");
+        bool flag = true;
+
+        if (_againstController.text.trim().isEmpty) {
+          setState(() {
+            isAgainstError = true;
+            flag = false;
+          });
+        }
+
+        if (_tradeNameController.text.trim().isEmpty) {
+          setState(() {
+            isTradeNameError = true;
+            flag = false;
+          });
+        }
+
+        if (_immunizationController.text.trim().isEmpty) {
+          setState(() {
+            isImmunizationError = true;
+            flag = false;
+          });
+        }
+
+        if (date == null) {
+          setState(() {
+            isDateError = true;
+            flag = false;
+          });
+        }
+
+        if (flag) {
+          VaccinationModel vaccinationModel = VaccinationModel(
+            against: _againstController.text,
+            date: date,
+            immunizationType: _immunizationController.text,
+            tradeName: _tradeNameController.text,
+          );
+
+          updateInformationList(
+              Global.vaccinationInformation, vaccinationModel);
+
+          AutoRouter.of(context).root.pop();
+          showSnackbar("Added Successfully");
+        }
       },
     );
   }
@@ -159,6 +355,7 @@ Widget _buildDateSelector({
   required void Function(DateTime?) setDate,
 }) {
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       Padding(
         padding: const EdgeInsets.only(left: 16.0),
@@ -192,6 +389,7 @@ Widget _buildDateSelector({
           },
         ),
       ),
+      Divider(),
     ],
   );
 }
@@ -218,7 +416,7 @@ Widget _buildTextField(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TextField(
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.multiline,
             controller: textEditingController,
             decoration: InputDecoration(),
             style: TextStyle(
@@ -226,6 +424,8 @@ Widget _buildTextField(
               fontWeight: FontWeight.w400,
               fontSize: 14.0,
             ),
+            maxLines: 4,
+            minLines: 1,
           ),
         ),
       ],
