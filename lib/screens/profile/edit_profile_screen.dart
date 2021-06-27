@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medi_vault/models/user_model.dart';
+import 'package:medi_vault/providers/user_provider.dart';
+import 'package:medi_vault/routes/app_router.gr.dart';
 import 'package:medi_vault/utils/app_logger.dart';
 import 'package:medi_vault/utils/global.dart';
 import 'package:medi_vault/utils/image_utils.dart';
@@ -13,6 +15,7 @@ import 'package:medi_vault/utils/preferences.dart';
 import 'package:medi_vault/widgets/circle_image.dart';
 import 'package:intl/intl.dart';
 import 'package:medi_vault/widgets/user_header.dart';
+import 'package:provider/provider.dart';
 
 const List<String> genderList = ['--Select--', 'Male', 'Female'];
 
@@ -234,13 +237,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           heightController.text)!,
                                     }));
 
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .getUser();
+
                                 setState(() {});
 
-                                if (!widget.isStarting) {
-                                  AutoRouter.of(context).pop();
-                                }
-
                                 Preference.setBool(Global.profileSet, true);
+
+                                if (!widget.isStarting) {
+                                  AutoRouter.of(context).root.pop();
+                                } else {
+                                  AutoRouter.of(context)
+                                      .root
+                                      .replace(DashboardScreenRoute());
+                                }
                               } else {
                                 AppLogger.print(
                                     "Validation failed! ${errors.toString()}");

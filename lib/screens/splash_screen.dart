@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:medi_vault/providers/user_provider.dart';
 import 'package:medi_vault/routes/app_router.gr.dart';
@@ -27,6 +28,15 @@ class _SplashScreenState extends State<SplashScreen> {
       await Preference.load();
       await Provider.of<UserProvider>(context, listen: false).getUser();
       await Future.delayed(Duration(seconds: 2));
+
+      AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
+        if (!isAllowed) {
+          // Insert here your friendly dialog box before call the request method
+          // This is very important to not harm the user experience
+          await AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+      });
+
       AppLogger.print("Proceed from splash screen");
 
       if (Preference.getBool(Global.profileSet)) {

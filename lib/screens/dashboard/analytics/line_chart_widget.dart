@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -51,6 +52,7 @@ class LineChartWidget extends StatelessWidget {
         // AppLogger.print("Key $temp matched!");
         double value = chartData!.data![temp]!;
         values.add(value);
+
         totalMin = min(totalMin, value);
         totalMax = max(totalMax, value);
       } else {
@@ -80,6 +82,9 @@ class LineChartWidget extends StatelessWidget {
                     units: units,
                     onSave: onSave,
                     chartData: chartData,
+                    minVal: minValue,
+                    maxVal: maxValue,
+                    title: title,
                   ),
                 );
               },

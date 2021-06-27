@@ -4,8 +4,22 @@ import 'package:medi_vault/providers/user_provider.dart';
 import 'package:medi_vault/routes/app_router.gr.dart';
 import 'package:medi_vault/utils/global.dart';
 import 'package:provider/provider.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          ledColor: Colors.white),
+    ],
+  );
+
   runApp(
     MultiProvider(
       providers: [

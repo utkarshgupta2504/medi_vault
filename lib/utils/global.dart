@@ -5,6 +5,8 @@ class Global {
 
   ///////////Shared Preference Keys
 
+  static String notificationId = "notification_id";
+
   ///Profile Keys
   static String profileSet = "profile_set";
   static String userProfileDetails = "user_profile_details";

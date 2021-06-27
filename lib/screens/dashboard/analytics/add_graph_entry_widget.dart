@@ -1,8 +1,11 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medi_vault/models/graph_data_model.dart';
 import 'package:medi_vault/utils/app_logger.dart';
 import 'package:medi_vault/utils/common_functions.dart';
+import 'package:medi_vault/utils/global.dart';
+import 'package:medi_vault/utils/preferences.dart';
 
 class AddGraphEntryWidget extends StatefulWidget {
   const AddGraphEntryWidget({
@@ -10,11 +13,17 @@ class AddGraphEntryWidget extends StatefulWidget {
     required this.units,
     required this.onSave,
     required this.chartData,
+    required this.minVal,
+    required this.maxVal,
+    required this.title,
   }) : super(key: key);
 
   final String units;
   final Function onSave;
   final GraphDataModel? chartData;
+  final double minVal;
+  final double maxVal;
+  final String title;
 
   @override
   _AddEntryWidgetState createState() => _AddEntryWidgetState();
@@ -39,7 +48,7 @@ class _AddEntryWidgetState extends State<AddGraphEntryWidget> {
     return AlertDialog(
       title: Column(
         children: [
-          Text("Add Entry"),
+          Text("Add ${widget.title}"),
           Divider(
             thickness: 2,
           ),
@@ -123,16 +132,33 @@ class _AddEntryWidgetState extends State<AddGraphEntryWidget> {
 
               AppLogger.print("Previous Values: ${prevValues.toString()}");
 
+              double value = double.tryParse(_textEditingController.text)!;
+
               if (prevValues == null) {
                 prevValues = {
                   date!: double.tryParse(_textEditingController.text)!,
                 };
               } else {
-                prevValues[date!] =
-                    double.tryParse(_textEditingController.text)!;
+                prevValues[date!] = value;
               }
 
               AppLogger.print("New Values: ${prevValues.toString()}");
+
+              if (value < widget.minVal || value > widget.maxVal) {
+                int? id = Preference.getInt(Global.notificationId, def: 0);
+
+                AwesomeNotifications().createNotification(
+                  content: NotificationContent(
+                    id: id,
+                    channelKey: 'basic_channel',
+                    title: 'Abnormal ${widget.title}',
+                    body:
+                        'Your ${widget.title} was too ${value < widget.minVal ? "low" : "high"} on ${DateFormat("MMMM dd").format(date!)}, you might want to consult a doctor.',
+                  ),
+                );
+
+                Preference.setInt(Global.notificationId, id + 1);
+              }
 
               widget.onSave(GraphDataModel(data: prevValues));
 
